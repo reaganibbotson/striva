@@ -7,7 +7,6 @@ import * as AuthSession from 'expo-auth-session';
 const CLIENT_ID = process.env.EXPO_PUBLIC_STRAVA_CLIENT_ID as string
 const CLIENT_SECRET = process.env.EXPO_PUBLIC_STRAVA_CLIENT_SECRET as string
 const REDIRECT_URI = AuthSession.makeRedirectUri({
-    // the "redirect" must match your "Authorization Callback Domain" in the Strava dev console.
     native: 'myapp://myapp.com',
 });
 const AUTHORIZATION_ENDPOINT = 'https://www.strava.com/oauth/mobile/authorize';
