@@ -22,11 +22,13 @@ export class StrivaComputeStack extends cdk.Stack {
             STRAVA_CLIENT_SECRET: stravaClientSecret,
         };
 
+        const lambdaPath = path.join(__dirname, '../lambda/');
+
         // Define the path to the packaged Lambda function code
         this.exchangeTokenLambda = new NodejsFunction(this, 'exchangeTokenLambda', {
             runtime: lambda.Runtime.NODEJS_18_X,
             handler: 'handler',
-            entry: path.join(__dirname, '../../api/src/handlers/auth/exchangeToken.ts'),
+            entry: path.join(lambdaPath, 'auth/exchangeToken.ts'),
             environment: standardEnvVars,
         });
 
@@ -34,7 +36,7 @@ export class StrivaComputeStack extends cdk.Stack {
         this.refreshTokenLambda = new NodejsFunction(this, 'refreshTokenLambda', {
             runtime: lambda.Runtime.NODEJS_18_X,
             handler: 'handler',
-            entry: path.join(__dirname, '../../api/src/handlers/auth/refreshToken.ts'),
+            entry: path.join(lambdaPath, 'auth/refreshToken.ts'),
             environment: standardEnvVars,
         });
     }
