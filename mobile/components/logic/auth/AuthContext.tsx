@@ -49,6 +49,11 @@ export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
     userToken: string,
     athleteData: AthleteData
   ) => {
+
+    if (!userToken || !athleteData) {
+      return;
+    }
+    
     setUserToken(userToken)
     setAthleteData(athleteData)
 

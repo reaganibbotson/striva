@@ -5,7 +5,7 @@ const STRAVA_CLIENT_ID = process.env.STRAVA_CLIENT_ID;
 const STRAVA_CLIENT_SECRET = process.env.STRAVA_CLIENT_SECRET;
 const STRAVA_TOKEN_URL = 'https://www.strava.com/oauth/token';
 
-const handler: APIGatewayProxyHandler = async (event) => {
+export const handler: APIGatewayProxyHandler = async (event) => {
     const { refresh_token } = JSON.parse(event.body || '{}');
 
     if (!refresh_token) {
@@ -36,5 +36,3 @@ const handler: APIGatewayProxyHandler = async (event) => {
         };
     }
 };
-
-export default handler

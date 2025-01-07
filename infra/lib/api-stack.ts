@@ -1,10 +1,10 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
-import { ComputeStack } from './compute-stack';
+import { StrivaComputeStack } from './compute-stack';
 
-export class APIStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, computeStack: ComputeStack, props?: cdk.StackProps) {
+export class StrivaAPIStack extends cdk.Stack {
+  constructor(scope: Construct, id: string, computeStack: StrivaComputeStack, props?: cdk.StackProps) {
     super(scope, id, props);
 
     const api = new apigateway.RestApi(this, 'striva-api', {

@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
-import { APIStack } from '../lib/api-stack';
-import { ComputeStack } from '../lib/compute-stack';
+import { StrivaAPIStack } from '../lib/api-stack';
+import { StrivaComputeStack } from '../lib/compute-stack';
 
 const app = new cdk.App();
-const computeStack = new ComputeStack(app, 'ComputeStack');
+const computeStack = new StrivaComputeStack(app, 'ComputeStack');
 
-new APIStack(app, 'APIStack', computeStack);
+new StrivaAPIStack(app, 'APIStack', computeStack);
