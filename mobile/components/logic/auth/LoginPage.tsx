@@ -38,6 +38,7 @@ export default function LoginPage() {
             const { code } = response.params;
             
             // Exchange the authorization code for an access token
+            console.log('Exchanging code for token...');
             const tokenExchangeURL = `${process.env.EXPO_PUBLIC_STRIVA_API_URL}/auth/exchange-token`;
             fetch(
                 tokenExchangeURL, 

@@ -1,14 +1,15 @@
 {
-  "name": "infra",
+  "name": "striva-api",
   "version": "0.1.0",
   "bin": {
-    "infra": "bin/infra.js"
+    "striva-api": "bin/striva-api.js"
   },
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
-    "cdk": "cdk"
+    "cdk": "cdk",
+    "start-sam": "cdk synth APIStack --no-staging > template.yaml && sam local start-api"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.147",

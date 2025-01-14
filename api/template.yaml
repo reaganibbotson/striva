@@ -1,0 +1,367 @@
+Resources:
+  strivaapi1FEE111B:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: Striva API
+    Metadata:
+      aws:cdk:path: APIStack/striva-api/Resource
+  strivaapiDeployment15E34A0811a5e44e100bebfb9b81aaf77942d613:
+    Type: AWS::ApiGateway::Deployment
+    Properties:
+      Description: Automatically created by the RestApi construct
+      RestApiId:
+        Ref: strivaapi1FEE111B
+    DependsOn:
+      - strivaapiauthexchangetokenPOST4B8D1C7A
+      - strivaapiauthexchangetoken15541C2E
+      - strivaapiauthrefreshtokenPOST0B59B391
+      - strivaapiauthrefreshtokenD581735E
+      - strivaapiauth54AAC39E
+      - strivaapiOPTIONS4CCE3107
+      - strivaapiDefault4xx7A981177
+    Metadata:
+      aws:cdk:path: APIStack/striva-api/Deployment/Resource
+  strivaapiDeploymentStageprod0A5C480B:
+    Type: AWS::ApiGateway::Stage
+    Properties:
+      DeploymentId:
+        Ref: strivaapiDeployment15E34A0811a5e44e100bebfb9b81aaf77942d613
+      RestApiId:
+        Ref: strivaapi1FEE111B
+      StageName: prod
+    Metadata:
+      aws:cdk:path: APIStack/striva-api/DeploymentStage.prod/Resource
+  strivaapiauth54AAC39E:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId:
+        Fn::GetAtt:
+          - strivaapi1FEE111B
+          - RootResourceId
+      PathPart: auth
+      RestApiId:
+        Ref: strivaapi1FEE111B
+    Metadata:
+      aws:cdk:path: APIStack/striva-api/Default/auth/Resource
+  strivaapiauthexchangetoken15541C2E:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId:
+        Ref: strivaapiauth54AAC39E
+      PathPart: exchange-token
+      RestApiId:
+        Ref: strivaapi1FEE111B
+    Metadata:
+      aws:cdk:path: APIStack/striva-api/Default/auth/exchange-token/Resource
+  strivaapiauthexchangetokenPOSTApiPermissionAPIStackstrivaapiA1B35767POSTauthexchangetokenDDF3A187:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::ImportValue: ComputeStack:ExportsOutputFnGetAttexchangeTokenLambdaC0F5468EArnB974FF0A
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: strivaapi1FEE111B
+            - /
+            - Ref: strivaapiDeploymentStageprod0A5C480B
+            - /POST/auth/exchange-token
+    Metadata:
+      aws:cdk:path: APIStack/striva-api/Default/auth/exchange-token/POST/ApiPermission.APIStackstrivaapiA1B35767.POST..auth.exchange-token
+  strivaapiauthexchangetokenPOSTApiPermissionTestAPIStackstrivaapiA1B35767POSTauthexchangetoken27950CE5:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::ImportValue: ComputeStack:ExportsOutputFnGetAttexchangeTokenLambdaC0F5468EArnB974FF0A
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: strivaapi1FEE111B
+            - /test-invoke-stage/POST/auth/exchange-token
+    Metadata:
+      aws:cdk:path: APIStack/striva-api/Default/auth/exchange-token/POST/ApiPermission.Test.APIStackstrivaapiA1B35767.POST..auth.exchange-token
+  strivaapiauthexchangetokenPOST4B8D1C7A:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: POST
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - ":apigateway:"
+              - Ref: AWS::Region
+              - :lambda:path/2015-03-31/functions/
+              - Fn::ImportValue: ComputeStack:ExportsOutputFnGetAttexchangeTokenLambdaC0F5468EArnB974FF0A
+              - /invocations
+      ResourceId:
+        Ref: strivaapiauthexchangetoken15541C2E
+      RestApiId:
+        Ref: strivaapi1FEE111B
+    Metadata:
+      aws:cdk:path: APIStack/striva-api/Default/auth/exchange-token/POST/Resource
+  strivaapiauthrefreshtokenD581735E:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId:
+        Ref: strivaapiauth54AAC39E
+      PathPart: refresh-token
+      RestApiId:
+        Ref: strivaapi1FEE111B
+    Metadata:
+      aws:cdk:path: APIStack/striva-api/Default/auth/refresh-token/Resource
+  strivaapiauthrefreshtokenPOSTApiPermissionAPIStackstrivaapiA1B35767POSTauthrefreshtoken1D4FA7A2:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::ImportValue: ComputeStack:ExportsOutputFnGetAttrefreshTokenLambdaBF648ED8Arn07EB75F1
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: strivaapi1FEE111B
+            - /
+            - Ref: strivaapiDeploymentStageprod0A5C480B
+            - /POST/auth/refresh-token
+    Metadata:
+      aws:cdk:path: APIStack/striva-api/Default/auth/refresh-token/POST/ApiPermission.APIStackstrivaapiA1B35767.POST..auth.refresh-token
+  strivaapiauthrefreshtokenPOSTApiPermissionTestAPIStackstrivaapiA1B35767POSTauthrefreshtokenA56DB344:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::ImportValue: ComputeStack:ExportsOutputFnGetAttrefreshTokenLambdaBF648ED8Arn07EB75F1
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: strivaapi1FEE111B
+            - /test-invoke-stage/POST/auth/refresh-token
+    Metadata:
+      aws:cdk:path: APIStack/striva-api/Default/auth/refresh-token/POST/ApiPermission.Test.APIStackstrivaapiA1B35767.POST..auth.refresh-token
+  strivaapiauthrefreshtokenPOST0B59B391:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: POST
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - ":apigateway:"
+              - Ref: AWS::Region
+              - :lambda:path/2015-03-31/functions/
+              - Fn::ImportValue: ComputeStack:ExportsOutputFnGetAttrefreshTokenLambdaBF648ED8Arn07EB75F1
+              - /invocations
+      ResourceId:
+        Ref: strivaapiauthrefreshtokenD581735E
+      RestApiId:
+        Ref: strivaapi1FEE111B
+    Metadata:
+      aws:cdk:path: APIStack/striva-api/Default/auth/refresh-token/POST/Resource
+  strivaapiOPTIONS4CCE3107:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: OPTIONS
+      Integration:
+        Type: MOCK
+      ResourceId:
+        Fn::GetAtt:
+          - strivaapi1FEE111B
+          - RootResourceId
+      RestApiId:
+        Ref: strivaapi1FEE111B
+    Metadata:
+      aws:cdk:path: APIStack/striva-api/Default/OPTIONS/Resource
+  strivaapiDefault4xx7A981177:
+    Type: AWS::ApiGateway::GatewayResponse
+    Properties:
+      ResponseParameters:
+        gatewayresponse.header.gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+        gatewayresponse.header.gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        gatewayresponse.header.gatewayresponse.header.Access-Control-Allow-Methods: "'*'"
+      ResponseType: DEFAULT_4XX
+      RestApiId:
+        Ref: strivaapi1FEE111B
+    Metadata:
+      aws:cdk:path: APIStack/striva-api/Default4xx/Resource
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Analytics: v2:deflate64:H4sIAAAAAAAA/12NzY6CUAyFn8U9VGExrhUTV8YJPsCkcotWofeGliGG+O4G0fiz6ne+nPSkkPzMIZlgp3HhznHFe+h3hsU5wk7/egx8QKMOL9DnpLYIHGWlPHFFofKXmsQG+5Z2hgca3Ag5qW+bgpaor/B4NPKG7OjdoB60Hmdz0uBF7+UvdY0qrPcOISvll5qaVdnLdWhuWwutfQxkpWReHNu9I94RnHT6n6aQJDCbnJQ5bloxrgny8d4ArwzcPB0BAAA=
+    Metadata:
+      aws:cdk:path: APIStack/CDKMetadata/Default
+    Condition: CDKMetadataAvailable
+Outputs:
+  strivaapiEndpoint47E6AE89:
+    Value:
+      Fn::Join:
+        - ""
+        - - https://
+          - Ref: strivaapi1FEE111B
+          - .execute-api.
+          - Ref: AWS::Region
+          - "."
+          - Ref: AWS::URLSuffix
+          - /
+          - Ref: strivaapiDeploymentStageprod0A5C480B
+          - /
+  StravaAPI:
+    Value:
+      Fn::Join:
+        - ""
+        - - https://
+          - Ref: strivaapi1FEE111B
+          - .execute-api.
+          - Ref: AWS::Region
+          - "."
+          - Ref: AWS::URLSuffix
+          - /
+          - Ref: strivaapiDeploymentStageprod0A5C480B
+          - /
+Conditions:
+  CDKMetadataAvailable:
+    Fn::Or:
+      - Fn::Or:
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - af-south-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-east-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-northeast-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-northeast-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-northeast-3
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-south-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-south-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-southeast-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-southeast-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-southeast-3
+      - Fn::Or:
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-southeast-4
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ca-central-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ca-west-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - cn-north-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - cn-northwest-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-central-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-central-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-north-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-south-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-south-2
+      - Fn::Or:
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-west-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-west-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-west-3
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - il-central-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - me-central-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - me-south-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - sa-east-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-east-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-east-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-west-1
+      - Fn::Equals:
+          - Ref: AWS::Region
+          - us-west-2
+Parameters:
+  BootstrapVersion:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /cdk-bootstrap/hnb659fds/version
+    Description: Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]
+
