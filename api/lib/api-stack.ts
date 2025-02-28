@@ -2,42 +2,50 @@ import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import { StrivaComputeStack } from './compute-stack';
+import { RouteBuilder } from './utils/route-builder';
+import { createAuthRoutes } from './routes/auth-routes';
 
 export class StrivaAPIStack extends cdk.Stack {
   constructor(scope: Construct, id: string, computeStack: StrivaComputeStack, props?: cdk.StackProps) {
     super(scope, id, props);
 
+    // Create the API Gateway
     const api = new apigateway.RestApi(this, 'striva-api', {
       restApiName: 'Striva API',
-    });
-
-    // Use the compute stack to create the Lambda functions
-    const authResource = api.root.addResource('auth');
-
-    const exchangeTokenRoute = authResource.addResource('exchange-token');
-    const exchangeTokenIntegration = new apigateway.LambdaIntegration(computeStack.exchangeTokenLambda);
-    exchangeTokenRoute.addMethod('POST', exchangeTokenIntegration);
-
-    const refreshTokenRoute = authResource.addResource('refresh-token');
-    const refreshTokenIntegration = new apigateway.LambdaIntegration(computeStack.refreshTokenLambda);
-    refreshTokenRoute.addMethod('POST', refreshTokenIntegration);
-
-    // Add CORS support
-    api.addGatewayResponse('Default4xx', {
-      type: apigateway.ResponseType.DEFAULT_4XX,
-      responseHeaders: {
-        'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
-        'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
-        'gatewayresponse.header.Access-Control-Allow-Methods': "'*'",
+      defaultCorsPreflightOptions: {
+        allowOrigins: apigateway.Cors.ALL_ORIGINS,
+        allowMethods: apigateway.Cors.ALL_METHODS,
+        allowHeaders: [
+          'Content-Type',
+          'X-Amz-Date',
+          'Authorization',
+          'X-Api-Key',
+          'X-Amz-Security-Token',
+          'X-Amz-User-Agent',
+        ],
       },
     });
 
-    // Add the CORS preflight OPTIONS method to the API
-    api.root.addMethod('OPTIONS');
+    // Create route builder
+    const routeBuilder = new RouteBuilder(api);
+
+    // Add authentication routes
+    routeBuilder.addRoutes('auth', createAuthRoutes(computeStack));
+
+    // Add default 4XX response
+    api.addGatewayResponse('Default4xx', {
+      type: apigateway.ResponseType.DEFAULT_4XX,
+      responseHeaders: {
+        'Access-Control-Allow-Origin': "'*'",
+        'Access-Control-Allow-Headers': "'*'",
+        'Access-Control-Allow-Methods': "'*'",
+      },
+    });
 
     // Output the API URL
     new cdk.CfnOutput(this, 'StravaAPI', {
-      value: api.url || 'Something went wrong with the deployment',
+      value: api.url,
+      description: 'API Gateway endpoint URL',
     });
   }
 }
